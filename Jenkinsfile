@@ -21,10 +21,11 @@ pipeline {
             }
         }
 
-        stage("ECR Push") {
+        stage("Docker Registry Push") {
             steps {
                sh '''
                  tag=v1.0.0
+                 podman login -u senthilnathan@assistanz.com --password-stdin < /dockerpwd.txt docker.io
                  podman push senthilnathanam/nginx-realip:$tag
                '''
             }
