@@ -26,8 +26,7 @@ pipeline {
                  podman build -t senthilnathanam/nginx-realip .
                  if [ -z "$image_tag" ]; then
                    podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$tag
-                 fi
-                 if [ "$release_type" = "Major" ]; then
+                 elif [ "$release_type" = "Major" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
                      k=`echo $image_tag | awk "{print $1}" | cut -d "." -f3`
