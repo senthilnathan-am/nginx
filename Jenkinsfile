@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-        tag=v1.0.0_${BUILD_NUMBER}
+        tag=v1.0.0_${env.BUILD_NUMBER}
     }
     stages {
         stage("Clone Git Repository") {
