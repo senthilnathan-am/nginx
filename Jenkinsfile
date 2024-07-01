@@ -22,19 +22,19 @@ pipeline {
                sh '''
                  podman rmi --all
                  image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.namei | awk 'NR==1{print $1}')
+                 release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                  podman build -t senthilnathanam/nginx-realip .
-                 if [ -z $image_tag ]; then
+                 if [ -z "$image_tag" ]; then
                    podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$tag
-                 else
-                   release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
-                   if [ "$release_type" = "Major" ]; then
+                 fi
+                 if [ "$release_type" = "Major" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
                      k=`echo $image_tag | awk "{print $1}" | cut -d "." -f3`
                      i=$(expr $i + 1)
                      new_tag=$i.$j.$k
                      podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$new_tag
-                   elif [ "$release_type" = "Minor" ]; then
+                 elif [ "$release_type" = "Minor" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
                      k=`echo $image_tag | awk "{print $1}" | cut -d "." -f3`
@@ -46,7 +46,7 @@ pipeline {
                      fi
                      new_tag=$i.$j.$k
                      podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$new_tag
-                   elif [ "$release_type" = "Patch" ]; then
+                 elif [ "$release_type" = "Patch" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
                      k=`echo $image_tag | awk "{print $1}" | cut -d "." -f3`
@@ -57,7 +57,6 @@ pipeline {
                      fi
                      new_tag=$i.$j.$k
                      podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$new_tag
-                   fi
                  fi
                '''
             }
