@@ -36,6 +36,7 @@ pipeline {
         stage("Helm Chart Preparation") {
             steps {
                 sh '''
+                  cd chart
                   chart_version=`grep appVersion Chart.yaml | awk '{print $2}' | tr -d '\"'`
                   value_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
                   sed -i 's/$value_tag/$tag$BUILD_NUMBER/g' values.yaml
@@ -46,7 +47,7 @@ pipeline {
                       i=$(expr $i + 1)
                   new_chat_version=$i.$j.$k
                   sed -i 's/$chart_version/$new_chat_version/g' Chart.yaml
-                  cd chart && helm package .
+                  helm package .
                 '''
             }
         }
