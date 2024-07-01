@@ -37,6 +37,7 @@ pipeline {
         stage("Helm Chart Preparation") {
             steps {
                   sh '''
+                    release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                     cd chart
                     chart_version=`grep appVersion Chart.yaml | awk '{print $2}' | tr -d '\"'`
                     value_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
