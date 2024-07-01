@@ -43,6 +43,7 @@ pipeline {
                        i=$(expr $i + 1)
                      else
                        j=$(expr $j + 1)
+                     fi
                      new_tag=$i.$j.$k
                      podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$new_tag
                    else if [ "$release_type" = "Patch" ]; then
@@ -53,6 +54,7 @@ pipeline {
                        exit;
                      else
                        k=$(expr $k + 1)
+                     fi
                      new_tag=$i.$j.$k
                      podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$new_tag
                    fi
