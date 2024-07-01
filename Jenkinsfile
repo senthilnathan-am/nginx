@@ -42,7 +42,7 @@ pipeline {
                     chart_version=`grep appVersion Chart.yaml | awk '{print $2}' | tr -d '\"'`
                     value_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
                     `sed -i "s/$value_tag/$tag$BUILD_NUMBER/g" values.yaml`
-                    if [ "$release_type" == "Major" ]; then
+                    if [ "$release_type" = "Major" ]; then
                       echo "hi"
                       i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
                       j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
