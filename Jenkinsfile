@@ -18,7 +18,7 @@ pipeline {
         stage("Building nginx container image") {
             steps {
                sh '''
-                 release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d \'`
+                 release_type=`grep -i 'release_type' RELEASE | awk '{print $3}'`
                  podman build -t senthilnathanam/nginx-realip:$tag$BUILD_NUMBER .
                '''
             }
