@@ -35,7 +35,7 @@ pipeline {
 
         stage("Helm Chart Preparation") {
             steps {
-                sh """#!/bin/bash
+                sh """
                   cd chart
                   chart_version=`grep appVersion Chart.yaml | awk '{print $2}' | tr -d '\"'`
                   value_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
