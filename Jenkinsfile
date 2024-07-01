@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment{
+        tag=v1.0.0_$BUILD_NUMBER
+    }
     stages {
         stage("Clone Git Repository") {
             steps {
@@ -15,8 +18,7 @@ pipeline {
         stage("Building nginx container image") {
             steps {
                sh '''
-                 tag=v1.0.0
-                 podman build -t senthilnathanam/nginx-realip:$tag_$BUILD_NUMBER .
+                 podman build -t senthilnathanam/nginx-realip:$tag .
                '''
             }
         }
@@ -26,7 +28,7 @@ pipeline {
                sh '''
                  tag=v1.0.0
                  podman login -u senthilnathan@assistanz.com --password-stdin < /dockerpwd.txt docker.io
-                 podman push senthilnathanam/nginx-realip:$tag_$BUILD_NUMBER
+                 podman push senthilnathanam/nginx-realip:$tag
                '''
             }
         }
