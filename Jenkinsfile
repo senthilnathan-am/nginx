@@ -104,6 +104,7 @@ pipeline {
                  if [ -z $image_tag ]; then
                    podman push senthilnathanam/nginx-realip:$tag
                  else
+                   echo "hi"
                    podman push senthilnathanam/nginx-realip:$new_tag 
                  fi
                '''
