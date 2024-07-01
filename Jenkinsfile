@@ -18,7 +18,7 @@ pipeline {
         stage("Building nginx container image") {
             steps {
                sh '''
-                 release_type=`grep -i 'release_type' RELEASE | awk '{print $3}'`
+                 release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                  podman build -t senthilnathanam/nginx-realip:$tag$BUILD_NUMBER .
                '''
             }
@@ -44,7 +44,6 @@ pipeline {
                       j=$(echo $chart_version | awk '{print $1}' | cut -d'.' -f2
                       k=$(echo $chart_version | awk '{print $1}' | cut -d'.' -f3
                       i=$(expr $i + 1)
-                  fi
                   new_chat_version=$i.$j.$k
                   sed -i 's/$chart_version/$new_chat_version/g' Chart.yaml
                   cd chart && helm package .
