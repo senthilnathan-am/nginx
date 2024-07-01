@@ -34,7 +34,7 @@ pipeline {
                      i=$(expr $i + 1)
                      new_tag=$i.$j.$k
                      podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$new_tag
-                   else if [ "$release_type" = "Minor" ]; then
+                   elif [ "$release_type" = "Minor" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
                      k=`echo $image_tag | awk "{print $1}" | cut -d "." -f3`
@@ -46,7 +46,7 @@ pipeline {
                      fi
                      new_tag=$i.$j.$k
                      podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$new_tag
-                   else if [ "$release_type" = "Patch" ]; then
+                   elif [ "$release_type" = "Patch" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
                      k=`echo $image_tag | awk "{print $1}" | cut -d "." -f3`
