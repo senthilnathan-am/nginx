@@ -28,7 +28,7 @@ pipeline {
                sh '''
                  tag=v1.0.0
                  podman login -u senthilnathan@assistanz.com --password-stdin < /dockerpwd.txt docker.io
-                 podman push senthilnathanam/nginx-realip:$tag
+                 podman push senthilnathanam/nginx-realip:$tag$BUILD_NUMBER
                '''
             }
         }
