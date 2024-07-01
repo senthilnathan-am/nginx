@@ -19,6 +19,7 @@ pipeline {
             steps {
                sh '''
                  release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
+                 podman rmi --all
                  podman build -t senthilnathanam/nginx-realip:$tag$BUILD_NUMBER .
                '''
             }
@@ -39,7 +40,7 @@ pipeline {
                   cd chart
                   chart_version=`grep appVersion Chart.yaml | awk '{print $2}' | tr -d '\"'`
                   value_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
-                  sed -i 's/${value_tag}/${tag}${BUILD_NUMBER}/g' values.yaml
+                  sed -i 's/$value_tag/$tag$BUILD_NUMBER/g' values.yaml
                   if [ $release_type == "Major" ]; then
                       i=$(echo $chart_version | awk '{print $1}' | cut -d'.' -f1
                       j=$(echo $chart_version | awk '{print $1}' | cut -d'.' -f2
