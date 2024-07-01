@@ -36,6 +36,7 @@ pipeline {
 
         stage("Helm Chart Preparation") {
             steps {
+              script {
                 if ($release_type == "Major") {
                   sh '''
                     cd chart
@@ -51,6 +52,7 @@ pipeline {
                     helm package .
                   '''
                 }
+              }
             }
         }
     }
