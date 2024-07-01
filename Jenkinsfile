@@ -1,4 +1,4 @@
-def new_tag=0.0.0
+def new_tag='0.0.0'
 
 pipeline {
     agent any
