@@ -44,9 +44,9 @@ pipeline {
                     `sed -i "s/$value_tag/$tag$BUILD_NUMBER/g" values.yaml`
                     if [ "$release_type" == "Major" ]; then
                       i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
-                      j=$(echo $chart_version | awk '{print $1}' | cut -d'.' -f2)
-                      k=$(echo $chart_version | awk '{print $1}' | cut -d'.' -f3)
-                      i=$(expr $i + 1)
+                      j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
+                      k=`echo $chart_version | awk "{print $1}" | cut -d "." -f3`
+                      #i=$(expr $i + 1)
                     fi
                     new_chat_version=$i.$j.$k
                     `sed -i "s/$chart_version/$new_chat_version/g" Chart.yaml`
