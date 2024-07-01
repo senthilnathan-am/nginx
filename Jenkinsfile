@@ -43,7 +43,7 @@ pipeline {
                     value_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
                     `sed -i "s/$value_tag/$tag$BUILD_NUMBER/g" values.yaml`
                     if [ "$release_type" == "Major" ]; then
-                      i=`echo $chart_version | awk "{print $1}" | cut -d"." -f1`
+                      i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
                       j=$(echo $chart_version | awk '{print $1}' | cut -d'.' -f2)
                       k=$(echo $chart_version | awk '{print $1}' | cut -d'.' -f3)
                       i=$(expr $i + 1)
