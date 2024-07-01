@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-        tag='v1.0.0_'env.BUILD_NUMBER
+        tag='v1.0.0_'
     }
     stages {
         stage("Clone Git Repository") {
@@ -18,7 +18,7 @@ pipeline {
         stage("Building nginx container image") {
             steps {
                sh '''
-                 podman build -t senthilnathanam/nginx-realip:$tag .
+                 podman build -t senthilnathanam/nginx-realip:$tag$BUILD_NUMBER .
                '''
             }
         }
