@@ -37,7 +37,7 @@ pipeline {
         stage("Helm Chart Preparation") {
             steps {
               script {
-                if ($release_type == "Major") {
+                if (env.release_type == "Major") {
                   sh '''
                     cd chart
                     chart_version=`grep appVersion Chart.yaml | awk '{print $2}' | tr -d '\"'`
