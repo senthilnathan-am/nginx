@@ -12,15 +12,13 @@ pipeline {
                         changelog: true,
                         poll: true
                     )
-                    sh '''
-                      release_type=$(grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d \')
-                    '''
             }
         }
 
         stage("Building nginx container image") {
             steps {
                sh '''
+                 release_type=$(grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d \')
                  podman build -t senthilnathanam/nginx-realip:$tag$BUILD_NUMBER .
                '''
             }
