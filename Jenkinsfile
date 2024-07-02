@@ -61,7 +61,6 @@ pipeline {
 
         stage("Docker Registry Push") {
             steps {
-               new_tag()
                sh '''
                  podman login -u senthilnathan@assistanz.com --password-stdin < /dockerpwd.txt docker.io
                  image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}' | tr -d "v")
