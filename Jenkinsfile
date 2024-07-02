@@ -150,6 +150,10 @@ pipeline {
                     helm package . 
                     cat /dockerpwd.txt | helm registry login -u senthilnathan@assistanz.com --password-stdin registry-1.docker.io
                     helm push *.tgz oci://registry-1.docker.io/senthilnathanam
+
+                    git add values.yaml Chart.yaml
+                    git commit -m "updated version $new_chat_version"
+                    git push origin
                   '''
             }
         }
