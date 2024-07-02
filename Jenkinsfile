@@ -98,7 +98,6 @@ pipeline {
                      new_tag=v$i.$j.$k
                      podman push senthilnathanam/nginx-realip:$new_tag
                  fi
-                 new_image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}')
                '''
             }
         }
