@@ -147,9 +147,10 @@ pipeline {
                     release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                     cd chart
                     chart_version=`grep appVersion Chart.yaml | awk '{print $2}' | tr -d '\"'`
-                    value_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
-                    `sed -i "s/$value_tag/$tag$BUILD_NUMBER/g" values.yaml`
-                    if [ "$release_type" = "Major" ]; then
+                    old_image_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
+                    new_image_tag=`curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|"\(.name) \(.content_type)"' | grep image | awk 'NR==1{print $1}'`
+                    `sed -i "s/$old_image_tag/$new_image_tag/g" values.yaml`
+                    if [ "$release_type" = "Major" && "$chat_version" != "1.0.0" ]; then
                       i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
                       j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
                       k=`echo $chart_version | awk "{print $1}" | cut -d "." -f3`
@@ -157,7 +158,10 @@ pipeline {
                     fi
                     new_chart_version=$i.$j.$k
                     `sed -i "s/$chart_version/$new_chart_version/g" Chart.yaml`
-                    helm package .
+                    cd ../ && git add chart && git commit -m "image new version $new_image_tag" && git push
+                    helm package chart
+                    cat /dockerpwd.txt | helm registry login -u senthilnathan@assistanz.com --password-stdin registry-1.docker.io
+                    helm push chart/*.tgz oci://registry-1.docker.io/senthilnathanam
                   '''
             }
         }
