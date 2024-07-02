@@ -153,5 +153,12 @@ pipeline {
                   '''
             }
         }
+        stage("Push to Git Repository") {
+            steps {
+                withCredentials([gitUsernamePassword(credentialsId: 'adf30590-6a2f-4c0a-8929-f1c2fd7088c6', gitToolName: 'Default')]) {
+                    sh "git push -u origin main"
+                }
+            }
+        }
     }
 }
