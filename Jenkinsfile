@@ -153,11 +153,5 @@ pipeline {
                   '''
             }
         }
-        stage("Push to Git Repository") {
-            steps {
-                    git (url: "https://github.com/senthilnathan-am/nginx.git")
-                    sh "git push -u origin main"
-                }
-            }
-        }
+      }
     }
