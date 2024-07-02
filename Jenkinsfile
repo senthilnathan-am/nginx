@@ -183,9 +183,9 @@ pipeline {
                         `sed -i "s/$chart_version/$new_chart_version/g" Chart.yaml`
                       fi
                     fi
-                    helm package chart
+                    helm package . 
                     cat /dockerpwd.txt | helm registry login -u senthilnathan@assistanz.com --password-stdin registry-1.docker.io
-                    helm push chart/*.tgz oci://registry-1.docker.io/senthilnathanam
+                    helm push *.tgz oci://registry-1.docker.io/senthilnathanam
                   '''
             }
         }
