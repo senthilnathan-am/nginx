@@ -19,7 +19,7 @@ pipeline {
             steps {
                sh '''
                  podman rmi --all
-                 image_tag=`curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image' | awk 'NR==1{print $1}' | tr -d "v"`
+                 image_tag=`curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}' | tr -d "v"`
                  release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                  podman build -t senthilnathanam/nginx-realip .
                  if [ -z "$image_tag" ]; then
@@ -64,7 +64,7 @@ pipeline {
                new_tag()
                sh '''
                  podman login -u senthilnathan@assistanz.com --password-stdin < /dockerpwd.txt docker.io
-                 image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image' | awk 'NR==1{print $1}' | tr -d "v")
+                 image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}' | tr -d "v")
                  release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                  if [ -z $image_tag ]; then
                    podman push senthilnathanam/nginx-realip:$tag
