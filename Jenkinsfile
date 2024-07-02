@@ -111,7 +111,7 @@ pipeline {
                     old_image_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
                     new_image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}')
                     `sed -i "s/$old_image_tag/$new_image_tag/g" values.yaml`
-                    if [ -z "$chart_version" ]; then
+                    if [ "$chart_version" ]; then
                       if [ "$release_type" = "Major" ]; then
                         i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
                         j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
