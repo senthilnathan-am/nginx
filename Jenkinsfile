@@ -107,10 +107,12 @@ pipeline {
                   sh '''
                     release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                     cd chart
+                    app_version=`grep -i appversion Chart.yaml | awk '{print $2}' | tr -d "\""`
                     chart_version=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep helm | awk 'NR==1{print $1}')
                     old_image_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
                     new_image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}')
                     `sed -i "s/$old_image_tag/$new_image_tag/g" values.yaml`
+                    `sed -i "/appVersion/s/$app_version/$new_image_tag/g" Chart.yaml`
                     if [ "$chart_version" ]; then
                       if [ "$release_type" = "Major" ]; then
                         i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
@@ -118,7 +120,7 @@ pipeline {
                         k=`echo $chart_version | awk "{print $1}" | cut -d "." -f3`
                         i=$(expr $i + 1)
                         new_chart_version=$i.$j.$k
-                        `sed -i "s/$chart_version/$new_chart_version/g" Chart.yaml`
+                        `sed -i "/version/s/$chart_version/$new_chart_version/g" Chart.yaml`
                       elif [ "$release_type" = "Minor" ]; then
                         i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
                         j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
@@ -130,7 +132,7 @@ pipeline {
                           j=$(expr $j + 1)
                         fi
                         new_chart_version=$i.$j.$k
-                        `sed -i "s/$chart_version/$new_chart_version/g" Chart.yaml`
+                        `sed -i "/version/s/$chart_version/$new_chart_version/g" Chart.yaml`
                       elif [ "$release_type" = "Patch" ]; then
                         i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
                         j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
@@ -141,7 +143,7 @@ pipeline {
                           k=$(expr $k + 1)
                         fi
                         new_chart_version=$i.$j.$k
-                        `sed -i "s/$chart_version/$new_chart_version/g" Chart.yaml`
+                        `sed -i "/version/s/$chart_version/$new_chart_version/g" Chart.yaml`
                       fi
                     fi
                     if [ -f *.tgz ]; then
