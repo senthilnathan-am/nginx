@@ -35,7 +35,7 @@ pipeline {
                      i=`echo $image_tag | awk "{print $1}" | cut -d"." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d"." -f2`
                      k=`echo $image_tag | awk "{print $1}" | cut -d"." -f3`
-                     if [ "$j" > 9 ]; then
+                     if [ "$j" -gt 9 ]; then
                        j=0
                        i=$(expr $i + 1)
                      else
@@ -47,7 +47,7 @@ pipeline {
                      i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
                      k=`echo $image_tag | awk "{print $1}" | cut -d "." -f3`
-                     if [ "$k" > 20 ]; then
+                     if [ "$k" -gt 20 ]; then
                        exit;
                      else
                        k=$(expr $k + 1)
