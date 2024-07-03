@@ -136,9 +136,9 @@ pipeline {
                         new_chart_version=$i.$j.$k
                         `sed -i "/version/s/$chart_version/$new_chart_version/g" Chart.yaml`
                       elif [ "$release_type" = "Patch" ]; then
-                        i=`echo $image_tag | awk "{print $1}" | cut -d "." -f1`
-                        j=`echo $image_tag | awk "{print $1}" | cut -d "." -f2`
-                        k=`echo $image_tag | awk "{print $1}" | cut -d "." -f3`
+                        i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
+                        j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
+                        k=`echo $chart_version | awk "{print $1}" | cut -d "." -f3`
                         if [ "$k" -gt 20 ]; then
                           exit;
                         else
