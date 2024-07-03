@@ -114,6 +114,7 @@ pipeline {
                     `sed -i "s/$old_image_tag/$new_image_tag/g" values.yaml`
                     `sed -i "/appVersion/s/$app_version/$new_image_tag/g" Chart.yaml`
                     if [ "$chart_version" ]; then
+                      `sed -i "/version/s/$tag/$chart_version/g" Chart.yaml`
                       if [ "$release_type" = "Major" ]; then
                         i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
                         j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
