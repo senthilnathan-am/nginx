@@ -105,12 +105,13 @@ pipeline {
         stage("Helm Chart Preparation") {
             steps {
                   sh '''
+                    sleep 10
                     release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                     cd chart
                     app_version=`grep -i appversion Chart.yaml | awk '{print $2}' | tr -d '\"'`
-                    chart_version=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep helm | awk 'NR==1{print $1}')
+                    chart_version=$(curl -s https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep helm | awk 'NR==1{print $1}')
                     old_image_tag=`grep tag values.yaml | awk '{print $2}' | tr -d '\"'`
-                    new_image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}')
+                    new_image_tag=$(curl -s https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}')
                     if [ "$new_image_tag" ]; then
                       `sed -i "s/$old_image_tag/$new_image_tag/g" values.yaml`
                       `sed -i "/appVersion/s/$app_version/$new_image_tag/g" Chart.yaml`
