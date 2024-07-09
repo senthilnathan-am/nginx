@@ -69,15 +69,15 @@ pipeline {
                    podman push senthilnathanam/nginx-realip:$tag
                  elif [ "$release_type" = "Major" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d"." -f1`
-                     j=`echo $image_tag | awk "{print $1}" | cut -d"." -f2`
-                     k=`echo $image_tag | awk "{print $1}" | cut -d"." -f3`
                      i=$(expr $i + 1)
+                     j=0
+                     k=0
                      new_tag=v$i.$j.$k
                      podman push senthilnathanam/nginx-realip:$new_tag
                  elif [ "$release_type" = "Minor" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d"." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d"." -f2`
-                     k=`echo $image_tag | awk "{print $1}" | cut -d"." -f3`
+                     k=0
                      if [ "$j" -gt 9 ]; then
                        j=0
                        i=$(expr $i + 1)
@@ -105,7 +105,7 @@ pipeline {
         stage("Helm Chart Preparation") {
             steps {
                   sh '''
-                    sleep 10
+                    sleep 5
                     release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                     cd chart
                     app_version=`grep -i appversion Chart.yaml | awk '{print $2}' | tr -d '\"'`
@@ -121,15 +121,15 @@ pipeline {
                       `sed -i "/version/s/$tag/$chart_version/g" Chart.yaml`
                       if [ "$release_type" = "Major" ]; then
                         i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
-                        j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
-                        k=`echo $chart_version | awk "{print $1}" | cut -d "." -f3`
+                        j=0
+                        k=0
                         i=$(expr $i + 1)
                         new_chart_version=$i.$j.$k
                         `sed -i "/version/s/$chart_version/$new_chart_version/g" Chart.yaml`
                       elif [ "$release_type" = "Minor" ]; then
                         i=`echo $chart_version | awk "{print $1}" | cut -d "." -f1`
                         j=`echo $chart_version | awk "{print $1}" | cut -d "." -f2`
-                        k=`echo $chart_version | awk "{print $1}" | cut -d "." -f3`
+                        k=0
                         if [ "$j" -gt 9 ]; then
                           j=0
                           i=$(expr $i + 1)
