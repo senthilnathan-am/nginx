@@ -26,15 +26,15 @@ pipeline {
                    podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$tag
                  elif [ "$release_type" = "Major" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d"." -f1`
-                     j=`echo $image_tag | awk "{print $1}" | cut -d"." -f2`
-                     k=`echo $image_tag | awk "{print $1}" | cut -d"." -f3`
+                     j=0
+                     k=0
                      i=$(expr $i + 1)
                      new_tag=v$i.$j.$k
                      podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$new_tag
                  elif [ "$release_type" = "Minor" ]; then
                      i=`echo $image_tag | awk "{print $1}" | cut -d"." -f1`
                      j=`echo $image_tag | awk "{print $1}" | cut -d"." -f2`
-                     k=`echo $image_tag | awk "{print $1}" | cut -d"." -f3`
+                     k=0
                      if [ "$j" -gt 9 ]; then
                        j=0
                        i=$(expr $i + 1)
