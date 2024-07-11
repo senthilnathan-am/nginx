@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment{
         tag='v1.0.0'
-        release_type=${Rlease Type}
+        release_type=${Release Type}
     }
     stages {
         stage("Clone Git Repository") {
