@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment{
         tag='v1.0.0'
+        release_type=${Rlease Type}
     }
     stages {
         stage("Clone Git Repository") {
@@ -20,7 +21,7 @@ pipeline {
                sh '''
                  podman rmi --all
                  image_tag=`curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}' | tr -d "v"`
-                 release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
+                 #release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                  podman build -t senthilnathanam/nginx-realip .
                  if [ -z "$image_tag" ]; then
                    podman tag senthilnathanam/nginx-realip senthilnathanam/nginx-realip:$tag
