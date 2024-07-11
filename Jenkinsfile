@@ -65,7 +65,7 @@ pipeline {
                sh '''
                  podman login -u senthilnathan@assistanz.com --password-stdin < /dockerpwd.txt docker.io
                  image_tag=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep image | awk 'NR==1{print $1}' | tr -d "v")
-                 release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
+                 #release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                  if [ -z $image_tag ]; then
                    podman push senthilnathanam/nginx-realip:$tag
                  elif [ "$release_type" = "Major" ]; then
@@ -107,7 +107,7 @@ pipeline {
             steps {
                   sh '''
                     sleep 5
-                    release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
+                    #release_type=`grep -i 'release_type' RELEASE | awk '{print $3}' | tr -d "\'"`
                     cd chart
                     app_version=`grep -i appversion Chart.yaml | awk '{print $2}' | tr -d '\"'`
                     chart_version=$(curl -s https://hub.docker.com/v2/repositories/senthilnathanam/nginx-realip/tags/?page_size=100 | jq -r '.results|.[]|.name+" "+.content_type' | grep helm | awk 'NR==1{print $1}')
